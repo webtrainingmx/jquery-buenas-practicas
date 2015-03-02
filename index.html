@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aprendiendo Bootstrap 3.x ñ</title>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="main-container" class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <h1>Bootstrap 3.x, cargando recursos desde una <em>CDN</em></h1>
+        <button class="btn">Usa MAXCDN</button>
+        <div id="main-internal" class="internal">
+          <div class="level">
+            <a href="" class="link">Link</a>
+          </div>
+          <div class="level">
+            <a href="" class="link">Link</a>
+          </div>
+          <div class="level">
+            <a href="" class="link">Link</a>
+          </div>
+          <div class="level">
+            <a id="my-link" href="" class="link">Link with id</a>
+            <a href="#" class="special-link" onclick="myEvent();">Link especial</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <h1>Bootstrap 3.x, cargando recursos desde una <em>CDN</em></h1>
+        <button class="btn">Usa MAXCDN</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <h1>Bootstrap 3.x, cargando recursos desde una <em>CDN</em></h1>
+        <button class="btn">Usa MAXCDN</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+  <script>window.jQuery || document.write('<script src="js/jquery-1.11.2.min.js"><\/script>');</script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  <script>
+
+    // 1) Forma de evitar conflictos
+  (function($){
+    "use strict";
+    $(document).on('ready', onDocumentLoaded);
+
+    function onDocumentLoaded() {
+      var $rows = $('.row'),
+          $links = $('#main-internal').find('a.link'),   // Stores all the .row elements
+          $levels = $('.level', '.internal'), // Busca sobre su contexto
+          $mainContainerOfMyDOM = $('#main-container'), // Main container of my document
+          $paragraphsInDOM = $('p'), // Use this variable for accessing <p></p>
+          $internalContainer = $('#main-internal'),
+          $linkWithId = $('#my-link'),
+          counter = 0;
+
+      /* $linkWithId
+        .attr('href', 'http://webtraining.mx')
+        .attr('title', 'WebtrainigMx')
+        .attr('data-twitter', '@webtrainingmx');
+      */
+      $linkWithId.attr({
+        "href" : "http://webtraining.mx",
+        "title" : "WebtrainigMx",
+        "data-twitter" : "@webtrainingmx"
+      });
+
+      // NO se recomienda!
+      /*$linkWithId.css({
+        "color" : "red",
+        "font-size" : "2em"
+      });*/
+
+      // Correcta
+      $linkWithId.addClass('error');
+
+
+      // document.getElementById()
+      // No se usó Sizzle
+      $mainContainerOfMyDOM.css('border', '1px solid red');
+
+      // Chaining
+      $rows
+        .css('border', '1px solid green')
+        .addClass('my-row');
+
+      // Code!
+      $rows.removeClass('my-row');
+
+      $paragraphsInDOM.addClass('important');
+      counter++;
+      // Creando 50000 elementos
+      // createElements();
+
+      // Eventos on click (live)
+      $internalContainer.on('click', 'a.link', onClickLinks);
+
+      //$links.on('click', onClickLinks);
+      $internalContainer.append('<a href="#" class="link">LINK</a>');
+
+      // Llamado ajax
+      //loadDataByAjax();
+    }
+
+    function onClickLinks (event) {
+        event.preventDefault();
+        console.log("click!");
+    }
+
+    function createElements(){
+      var $mainContainer = $('#main-container'),
+          items = [];
+      console.time('append');
+      for(var i=0; i<25000; i++) {
+        $mainContainer.append('<div class="row"></div>');
+      }
+      console.timeEnd('append');
+
+      console.time('append2');
+      for(var i=0; i<25000; i++) {
+        items.push('<div class="row"></div>');
+      }
+      $mainContainer.append(items.join(''));
+      console.timeEnd('append2');
+    }
+
+    function loadDataByAjax() {
+      var url = "data/sample.json";
+      // Correcto, pero no óptimo
+      /* $.getJSON(url, function(response){
+        console.log(response);
+      });*/
+
+      $.ajax({
+        url: url,
+        type: "GET",
+        dataType: "json",
+        success:  function(response){
+          console.info("SUCCESS!");
+          console.log(response);
+        }
+      });
+    }
+  })(jQuery);
+    // 2) noConflict()
+    var $jq = jQuery.noConflict();
+    //console.info($jq('#main-container').html());
+  </script>
+
+
+</body>
+</html>
